@@ -29,3 +29,16 @@ def reset_mp_globals():
     mp.rounding = 'n'
     iv.prec = mp.prec
     iv.pretty = False
+
+
+@pytest.fixture(autouse=True, scope="session")
+def functions_setup_teardown():
+    import mpmath
+    yield
+    stats = mpmath.libmp.backend.stats
+    total = sum(stats.values())
+    import pprint
+    print()
+    pprint.pprint({k:v/total for k, v in stats.items()},
+                  indent=True, compact=True,
+                  sort_dicts=False)

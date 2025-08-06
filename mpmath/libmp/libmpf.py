@@ -190,7 +190,7 @@ if gmpy:
     _normalize = gmpy._mpmath_normalize
 
 def normalize(sign, man, exp, bc, prec, rnd):
-    assert type(man) == MPZ
+    assert type(man) == type(MPZ(1))
     assert type(bc) in _exp_types
     assert type(exp) in _exp_types
     assert bc == man.bit_length()
