@@ -21,6 +21,8 @@ gmpy = None
 BACKEND = 'python'
 MPZ = int
 MPQ = fractions.Fraction
+import collections
+stats = collections.defaultdict(int)
 
 if 'MPMATH_NOGMPY' not in os.environ:
     try:
@@ -35,7 +37,29 @@ if 'MPMATH_NOGMPY' not in os.environ:
             pass
 
     if gmpy:
-        MPZ = gmpy.mpz
+        def MPZ(*args):
+            global stats
+            if len(args) != 1:
+                return gmpy.mpz(*args)
+            x = args[0]
+            bc = int(x).bit_length()
+            if bc <= 10:
+                stats['<=10'] += 1
+            elif bc <= 24:
+                stats['<=24'] += 1
+            elif bc <= 53:
+                stats['<=53'] += 1
+            elif bc <= 113:
+                stats['<=113'] += 1
+            elif bc <= 237:
+                stats['<=237'] += 1
+            elif bc <= 1000:
+                stats['<=1000'] += 1
+            elif bc <= 3000:
+                stats['<=3000'] += 1
+            else:
+                stats['other'] += 1
+            return gmpy.mpz(x)
 
 MPZ_ZERO = MPZ(0)
 MPZ_ONE = MPZ(1)
@@ -43,4 +67,4 @@ MPZ_TWO = MPZ(2)
 MPZ_THREE = MPZ(3)
 MPZ_FIVE = MPZ(5)
 
-int_types = (int,) if BACKEND == 'python' else (int, MPZ)
+int_types = (int,) if BACKEND == 'python' else (int, type(MPZ(1)))
