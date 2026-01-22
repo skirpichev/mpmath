@@ -438,12 +438,11 @@ class _mpf(mpnumeric):
             >>> f'{x:.10a}'
             '-0x1.3c0ca2a5b2p+0'
 
-        Format type ``'b'`` allows format number in binary:
+        Format type ``'b'`` allows format number in binary, like
+        for ``'a'`` formatting type:
 
             >>> f'{x:.15b}'
-            '-1.001111000000110p+0'
-
-        Alternate form (``'#'`` option) adds ``0b`` prefix.
+            '-0b1.001111000000110p+0'
 
         """
 

@@ -1407,7 +1407,7 @@ _FLOAT_FORMAT_SPECIFICATION_MATCHER = re.compile(r"""
         (?P<frac_separators>[,_])?
     )?
     (?P<rounding>[UDYZN])?
-    (?P<type>[aAbeEfFgG%])?
+    (?P<type>[aAbBeEfFgG%])?
 """, re.DOTALL | re.VERBOSE).fullmatch
 
 _GMPY_ROUND_CHAR_DICT = {
@@ -1532,10 +1532,6 @@ def format_fixed(s, dps, rnd=round_nearest):
     return int_part, frac_part
 
 
-_MAP_FMT_EXP = {'E': 'E', 'e': 'e', 'G': 'E', 'g': 'e',
-                'A': 'P', 'a': 'p', 'B': 'p', 'b': 'p', '': 'e'}
-
-
 def format_scientific(s, dps, rnd=round_nearest):
     base = 10
 
@@ -1599,7 +1595,7 @@ def fill_sep(digits, sep, prev, nmod, sep_range):
 
 def format_digits(num, format_dict, prec, rnd, _pretty_repr_dps):
     capitalize = False
-    if format_dict['type'] in list('AFGE'):
+    if format_dict['type'] in list('ABFGE'):
         capitalize = True
 
     fmt_type = format_dict['type'].lower()
@@ -1672,10 +1668,11 @@ def format_digits(num, format_dict, prec, rnd, _pretty_repr_dps):
 
     elif fmt_type == 'b':
         int_part, frac_part, exponent = format_binary(num, dps, rnd=rnd)
-        if frac_part:
+        int_part = ('0B' if capitalize else '0b') + int_part
+        if frac_part or format_dict['alternate']:
             frac_part = '.' + frac_part
-        if format_dict['alternate']:
-            int_part = '0b' + int_part
+        if capitalize:
+            exponent = exponent.replace('p', 'P')
 
     else:  # fixed-point formats
         int_part, frac_part = format_fixed(num, dps, rnd=rnd)

@@ -894,19 +894,21 @@ def test_binary_with_gmpy2_bulk(x, p):
         fmt = 'b'
     g_bin = format(gmpy2.mpfr(x), fmt)
     m_bin = format(mp.mpf(x), fmt)
-    assert m_bin == g_bin
+    assert m_bin.replace('0b', '') == g_bin
 
 
 def test_binary_fmt():
     x = mp.mpf(3)
-    assert f'{x:b}' == '1.1p+1'
-    assert f'{x:.2b}' == '1.10p+1'
-    assert f'{x:+.2b}' == '+1.10p+1'
+    assert f'{x:b}' == '0b1.1p+1'
+    assert f'{x:.2b}' == '0b1.10p+1'
+    assert f'{x:+.2b}' == '+0b1.10p+1'
     assert f'{x:#.2b}' == '0b1.10p+1'
 
     x = mp.mpf(0)
-    assert f'{x:.2b}' == '0.00p+0'
-    assert f'{x:b}' == '0p+0'
+    assert f'{x:.2b}' == '0b0.00p+0'
+    assert f'{x:b}' == '0b0p+0'
+    assert f'{x:B}' == '0B0P+0'
+    assert f'{x:#b}' == '0b0.p+0'
 
 
 def test_hexadecimal_fmt():
