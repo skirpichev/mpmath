@@ -2,8 +2,8 @@ import cmath
 import functools
 import inspect
 import math
-import sys
 import warnings
+import sys
 
 from . import function_docs, libfp, libmp
 from .ctx_base import StandardBaseContext
@@ -88,8 +88,10 @@ class FPContext(StandardBaseContext):
 
     absmin = absmax = abs
 
-    def isspecial(ctx, x):
-        return not x or x - x != 0.0
+    def is_special(ctx, x):
+        warnings.warn("the is_special() method is deprecated",
+                      DeprecationWarning)
+        return not ctx.isnormal(x)
 
     def isnan(ctx, x):
         return x != x
@@ -103,11 +105,10 @@ class FPContext(StandardBaseContext):
         return math.isfinite(x)
 
     def isnormal(ctx, x):
-        warnings.warn("the isnormal() method is deprecated",
-                      DeprecationWarning)
-        if x:
-            return x - x == 0.0
-        return False
+        if type(x) is complex:
+            return ctx.isnormal(abs(x))
+        # XXX: can use math.isnormal() on Python 3.15+
+        return bool(x) and math.isfinite(x) and abs(x) >= sys.float_info.min
 
     def isnpint(ctx, x):
         if type(x) is complex:
