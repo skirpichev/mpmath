@@ -58,7 +58,6 @@ Features:
   #936 (Sergey B Kirpichev)
 * Use PyREPL, as fallback (no IPython), see #941 (Sergey B Kirpichev)
 * Add exp2() and log2(), see #948 (Sergey B Kirpichev)
-* Add isspecial() method for contexts, see #949 (Sergey B Kirpichev)
 * Support rounding property for the mp context, see #963 (Sergey B Kirpichev)
 * Add Fox H-function with rational A/B parameters (foxh()), see #982 (Hongren Zheng)
 
@@ -79,13 +78,13 @@ Compatibility:
   #779, #844 and #845 (Sergey B Kirpichev, Warren Weckesser)
 * Deprecate mpmath.math2, see #769 (Sergey B Kirpichev)
 * Drop support for CPython 3.8, see #911 (Sergey B Kirpichev)
-* Deprecate isnormal() method of contexts, see #949 (Sergey B Kirpichev)
 * Importing from the mpmath.libmp submodules is deprecated, use instead ``from
   mpmath.libmp import foo``, see
   issue https://github.com/mpmath/mpmath/issues/704#issuecomment-2953536980
   for available functions (Sergey B Kirpichev)
 * Deprecate bitcount function, see #721 and #955 (Sergey B Kirpichev)
 * Deprecate mpf/mpc_log, see #989 (Sergey B Kirpichev)
+* Deprecate fp.is_special(), see #1042 (Sergey B Kirpichev)
 
 Bug fixes:
 
@@ -168,6 +167,7 @@ Bug fixes:
 * Fix erf(z) with re(z) of large magnitude, see #1039 (Sergey B Kirpichev)
 * Return nan's for polylog(s, nan) or polylog(s, nan+nanj),
   see #1041 (Sergey B Kirpichev)
+* Fix fp.isnormal() for subnormals, see #1042 (Sergey B Kirpichev)
 
 Maintenance:
 
