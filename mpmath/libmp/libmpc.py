@@ -436,10 +436,7 @@ def mpc_ln(z, prec, rnd=round_fast):
     im = mpc_arg(z, prec, rnd)
     return re, im
 
-def mpc_log(x, prec, rnd=round_fast):
-    warnings.warn("mpc_log is deprecated, use mpc_ln",
-                  DeprecationWarning)
-    return mpc_ln(x, prec, rnd)
+mpc_log = mpc_ln  # deprecated alias
 
 def mpc_cos(z, prec, rnd=round_fast):
     """Complex cosine. The formula used is cos(a+bi) = cos(a)*cosh(b) -
